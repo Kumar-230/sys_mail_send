@@ -2,6 +2,7 @@ import Parser from "rss-parser";
 import { Redis } from "@upstash/redis";
 import OpenAI from "openai";
 import { SOURCES, PRIORITY, type Category } from "./sources";
+import { saveToArchive } from "./archive";
 
 const parser = new Parser({ timeout: 8000 });
 const redis = Redis.fromEnv();
@@ -106,10 +107,12 @@ export async function buildDigest() {
 
   const enriched = await summarize(selected);
 
-  // Mark only successfully selected items as seen.
+  // Mark only successfully selected items as seen and persist the enriched content
+  // so the Vercel site can act as the permanent learning dashboard.
   for (const item of selected) {
     await redis.set(item.id, "1", { ex: 60 * 60 * 24 * 60 });
   }
+  await saveToArchive(enriched);
 
   return enriched;
 }
