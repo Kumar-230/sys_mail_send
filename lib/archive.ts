@@ -29,8 +29,20 @@ export async function saveToArchive(items: Omit<ArchivedItem, "archivedAt">[]) {
 export async function getArchive(limit = 60): Promise<ArchivedItem[]> {
   const ids = await redis.lrange<string>("digest:archive", 0, limit - 1);
   if (!ids?.length) return [];
-  const rows = await Promise.all(ids.map(id => redis.get<string>(`digest:content:${id}`)));
-  return rows.filter(Boolean).map(x => JSON.parse(x as string));
+  const rows = await Promise.all(ids.map(id => redis.get<ArchivedItem | string>(`digest:content:${id}`)));
+  const result: ArchivedItem[] = [];
+  for (const row of rows) {
+    if (!row) continue;
+    try {
+      const value = typeof row === "string" ? JSON.parse(row) : row;
+      if (value && typeof value === "object" && value.id && value.title && value.link) {
+        result.push(value as ArchivedItem);
+      }
+    } catch (error) {
+      console.error("Skipping malformed archive item", error);
+    }
+  }
+  return result;
 }
 
 export async function getReadIds(ids: string[]) {
