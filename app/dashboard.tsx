@@ -16,6 +16,17 @@ type Item = {
 
 const categories = ["All", "System Design", "Backend & APIs", "Databases", "Cloud", "Cybersecurity"];
 
+function formatDate(value?: string) {
+  if (!value) return "Recent";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Recent";
+  try {
+    return new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(date);
+  } catch {
+    return "Recent";
+  }
+}
+
 export default function Dashboard({ items, initialReadIds }: { items: Item[]; initialReadIds: string[] }) {
   const [filter, setFilter] = useState("All");
   const [readIds, setReadIds] = useState(() => new Set(initialReadIds));
@@ -87,7 +98,7 @@ export default function Dashboard({ items, initialReadIds }: { items: Item[]; in
                 <span className="source">{item.source}</span>
               </div>
               <h2><a href={item.link} target="_blank" rel="noreferrer" onClick={() => markRead(item.id)}>{item.title}</a></h2>
-              <div className="date">{item.pubDate ? new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(item.pubDate)) : "Recent"}</div>
+              <div className="date">{formatDate(item.pubDate)}</div>
               {item.summary && <p>{item.summary}</p>}
               {item.whyItMatters && <div className="why"><strong>Why it matters</strong><span>{item.whyItMatters}</span></div>}
               <div className="article-actions">
