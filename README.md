@@ -19,7 +19,9 @@ The app:
 - balances categories;
 - remembers sent articles in Upstash Redis for 60 days;
 - optionally uses OpenAI for concise summaries and “why it matters” context;
-- sends the result through Resend.
+- sends the result through Resend;
+- stores enriched articles in an archive so the deployed homepage becomes a learning dashboard;
+- lets you filter by topic and mark articles as read, with read state persisted in Redis for one year.
 
 ## Deploy
 
@@ -83,3 +85,7 @@ Don't make the digest huge. The current design intentionally caps it at 8 new ar
 - one security implication.
 
 That makes the system a learning loop rather than a newsletter.
+
+## Dashboard
+
+The homepage is now the persistent learning dashboard. After the first cron run (or a manual `/api/test` seed), it shows the archived articles, AI summaries, “Why it matters” context, topic filters, and read/unread state.
