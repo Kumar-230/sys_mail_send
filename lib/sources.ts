@@ -508,6 +508,48 @@ export const SOURCES: Source[] = [
     weight: 4,
   },
 
+  {
+  name: "Google Cloud Blog",
+  feed: "https://cloudblog.withgoogle.com/rss",
+  category: "Cloud",
+  weight: 5,
+},
+
+{
+  name: "Confluent",
+  feed: "https://www.confluent.io/blog/feed/",
+  category: "Databases",
+  weight: 5,
+},
+
+{
+  name: "Redis",
+  feed: "https://redis.io/rss.xml",
+  category: "Databases",
+  weight: 4,
+},
+
+{
+  name: "CockroachDB",
+  feed: "https://www.cockroachlabs.com/blog/index.xml",
+  category: "Databases",
+  weight: 5,
+},
+
+{
+  name: "Microsoft Azure Blog",
+  feed: "https://azure.microsoft.com/en-us/blog/feed/",
+  category: "Cloud",
+  weight: 5,
+},
+
+{
+  name: "ClickHouse",
+  feed: "https://clickhouse.com/rss.xml",
+  category: "Databases",
+  weight: 5,
+},
+
   // ============================================================
   // CURATION PRIORITY
   // ============================================================
